@@ -14,54 +14,45 @@ import { ReactiveVar } from 'meteor/reactive-var';
 
 export const IAppEditable = DeclareMixin(( superclass ) => class extends superclass {
 
-    #currentPage = new ReactiveVar( null );
+    #editionAsked = new ReactiveVar( false );
 
     constructor(){
         super( ...arguments );
         const self = this;
 
+        // an autorun tracker reset the editionAsked reactive var each time the user logs out
+        Tracker.autorun(() => {
+            if( !Meteor.userId()){
+                self.ieditableAsked( false );
+            }
+        });
+
+        // keep this instance at the package level (hoping there is only one)
+        AppEdit.runContext = this;
+
         return this;
     } 
 
     /**
-     * @summary build a list of the display units which are planned to appear in the specified menu
-     * @param {String} menu the name of the menu
-     * @param {Function} isAllowed an optional (async) permission function
-     *  When null, the user is considered allowed to
-     * @returns {Array<DisplayUnit>} the ordered list of the allowed display units
+     * @returns {Boolean} whether edition is allowed to the user for the page
+     *  Reactive method
      */
-    async ipageableBuildMenu( menu, isAllowed ){
-        assert( menu && _.isString( menu ), 'pwix:app-pages IAppEditable.ipageableBuildMenu() expects a string, got '+menu );
-        assert( !isAllowed || _.isFunction( isAllowed ), 'pwix:app-pages IAppEditable.ipageableBuildMenu() expects an optional function, got '+isAllowed );
-        let pages = [];
-        let promises = [];
-        AppPages.DisplaySet.Singleton.enumerate( async ( name, page ) => {
-            if( page.get( 'inMenus' ).includes( menu )){
-                const wantPermission = page.get( 'wantPermission' );
-                console.debug( 'wantPermission', wantPermission );
-                const p = Promise.resolve( !wantPermission || isAllowed( wantPermission ));
-                pages.push( page );
-                promises.push( p );
-            }
-            return true;
-        });
-        let allowed = [];
-        return Promise.allSettled( promises ).then(( res ) => {
-            assert( res.length === pages.length, 'expect res.length === pages.length' );
-            for( let i=0 ; i<pages.length ; ++i ){
-                if( res[i].value ){
-                    allowed.push( pages[i] );
-                }
-            }
-            //console.debug( 'returning', allowed );
-            return allowed;
-        });
+    async ieditableAllowed(){
+        const allowFn = AppEdit.configure().allowFn;
+        const allowed = allowFn ? await allowFn( 'pwix.app_edit.feat.editable' ) : false;
+        return allowed;
     }
 
     /**
-     * @returns {DisplayUnit} the current page
+     * Getter/Setter
+     * @summary
+     * @param {Boolean} b the optional 'asked' status, i.e. whether the used has asked for editing the current page
+     * @returns {Boolean} the current asked edition status
      */
-    ipageablePage(){
-        return this.#currentPage.get();
-    } 
+    ieditableAsked( b ){
+        if( b === true || b === false ){
+            this.#editionAsked.set( b );
+        }
+        return this.#editionAsked.get();
+    }
 });

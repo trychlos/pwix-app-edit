@@ -10,6 +10,3 @@ import { RunContext } from '../classes/run-context.class';
 
 // provides base classes in AppEdit global object
 CoreApp.RunContext = RunContext;
-
-// our functions
-import './DOM.js';

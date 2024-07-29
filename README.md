@@ -2,60 +2,17 @@
 
 ## What is it ?
 
-A package which provides some core features to our applications.
+A package which helps an application to manage inline editable documents. It relies on `pwix:core-app` and extends the `CoreApp.RunContext` class with a `IAppEditable` interface.
 
 ## Features
 
-### Page management
+When an application manages inline editable documents, following features are to be managed:
 
-A core feature of any application is to display pages to the users, to propose menus, maybe to use modal dialogs to provide informations or let the user enter datas.
+- have an edit button to let the user edit the document; this button may be hidden, on, or off
 
-`pwix:app-edit` try to take in charge the common code, for example the user is he allowed to access the required display unit, is he allowed to enter data in it, and so on.
+- have a Blaze component to visually edit the document
 
-Pages collection as obviously described by the application, and the current run context, are both materialized by classes that the application may (and even should) derive:
-
-- `AppEdit.DisplaySet`
-- `AppEdit.DisplayUnit`
-- `AppEdit.RunContext`
-
-### Application administrator
-
-An application may need a _super user_, a user who is allowed to modify some special configuration settings, or to do anything... The `pwix:startup-app-admin` package, when installed in an application, provides the code needed to define this application administrator, verify his/her email address, attribute required role.
-
-To take advantage of this feature, the application must:
-
-- install the required package:
-
-```sh
-    meteor add pwix:startup-app-admin
-```
-
-- configure this package to take advantage of it:
-
-```js
-    AppEdit.configure({
-        withStartupAppAdmin: true
-    });
-```
-
-When these two conditions are met, a reactive data source is 
-
-
-+++++++++++++++++++++++++
-
-### Environment management
-
-While `nodejs` defines only three environments (`development`, `staging` and `production`), and though Meteor has followed the same route, we strongly believe that many more would be better, and that we should not be tied to such only three parts.
-
-We so use the `APP_ENV` environment variable to address our own environment identifier. Through this identifier, we ask the server to publish the setings recorded inside of its private settings (see `pwix:env-settings`).
-
-The settings are read from the server settings for this environment through the path `Meteor.settings[APP.name].environments[<environment_identifier>]`.
-
-If not specified in the `APP_ENV` variable, the environment identifier falls back to the `nodejs` environment name.
-
-### Settings management
-
-`pwix:app-edit` the settings dedicated to the current environment as the `AppEdit.envSettings` reactive var.
+- have storage collections to record the document depending of the chosen language.
 
 ## Provides
 
@@ -63,12 +20,23 @@ If not specified in the `APP_ENV` variable, the environment identifier falls bac
 
 The exported `AppEdit` global object provides following items:
 
-#### `AppEdit.envSettings`
+#### Classes
 
-A ReactiveVar which is set at startup with the settings for this environment. It contains following keys:
+#### Interfaces
 
-- `env`: the name of the running environment from `APP_ENV` environment variable
-- `settings`: the relevant settings read from the APP/private/config/server JSON configuration.
+##### `IAppEditable`
+
+The `IAppEditable` interface extends the `CoreApp.RunContext` class with folllowing methods:
+
+- `async ieditableAllowed(): Boolean`
+
+    Whether the user is allowed to edit the current document.
+
+    Use the `allowFn` configuration option, defaulting to `false`.
+
+- `ieditableAsked( [ask<Boolean>] ): Boolean`
+
+    A getter/setter which says if the user has asked for editing of the current document.
 
 #### Functions
 
@@ -84,68 +52,11 @@ Returns the i18n namespace used by the package. Used to add translations at runt
 
 ### Blaze components
 
-#### `coreCookiesLink`
+#### `AppEditButton`
 
-Display a link to the Cookies Policy.
+Displays (or not) a toggle button to let the user enter in edition mode on the current page.
 
-Parameters can be provided:
-
-- label, defaulting to 'Cookies management policy'
-- title, defaulting to 'Cookies management policy'
-- route, defaulting to configured routePrefix + '/cookies'.
-
-#### `coreFieldCheckIndicator`
-
-Display an indicator about the validity status of a field.
-
-Parameters:
-
-- type: a `AppEdit.FieldCheck` constant as `INVALID`, `NONE`, `UNCOMPLETE` or `VALID`.
-
-#### `coreFieldTypeIndicator`
-
-Display an indicator about the type of a field.
-
-Parameters:
-
-- type: a `AppEdit.FieldType` constant as `INFO`, `SAVE` or `WORK`
-- classes: if set, a list of classes to be added to the default ones.
-
-#### `coreGDPRLink`
-
-Display a link to the Privacy Policy.
-
-Parameters can be provided:
-
-- label, defaulting to 'Privacy Policy'
-- title, defaulting to 'Privacy Policy'
-- route, defaulting to configured routePrefix + '/gdpr'.
-
-#### `coreGTULink`
-
-Display a link to the General Terms of Use.
-
-Parameters can be provided:
-
-- label, defaulting to 'General Terms of Use'
-- title, defaulting to 'General Terms of Use'
-- route, defaulting to configured routePrefix + '/gtu'.
-
-#### `coreLegalsLink`
-
-Display a link to the Legal Informations.
-
-Parameters can be provided:
-
-- label, defaulting to 'Legal Informations'
-- title, defaulting to 'Legal Informations'
-- route, defaulting to configured routePrefix + '/legals'.
-
-### Less mixins
-
-#### `.x-btn-variant( @color )`
-
-#### `.x-btn-outline-variant( @color )`
+The component is configurable through the package configuration as there is most probably only one such toggle switch in the application.
 
 ## Configuration
 
@@ -153,33 +64,25 @@ The package's behavior can be configured through a call to the `AppEdit.configur
 
 Known configuration options are:
 
-- `adminRole`
+- `allowFn`
 
-    Define the name of the **application administrator** role.
+    An async function which will be called with an action string identifier, and must return whether the current user is allowed to do the specified action.
 
-    Default to 'APP_ADMINISTRATOR'.
+    If the function is not provided, then the default is to deny all actions.
 
-    As a reminder, this same value is expected to be also configured in the `pwix:startup-app-admin` package.
+    `allowFn` prototype is: `async allowFn( action<String> [, ...<Any> ] ): Boolean`
 
-- `layout`
+- `toggleHiddenWhenNotConnected`
 
-    Define the name of the default layout for a page which doesn't define it.
+    Whether the toggle button must be shown and disabled when user is not connected, or hidden.
 
-    Default to 'app'.
+    Defaults to `true`: button is hidden.
 
-    This layout is expected to be provided by the application.
+- `toggleHiddenWhenUnallowed`
 
-- `routePrefix`
+    Whether the toggle button must be shown and disabled when user is connected but not allowed, or hidden.
 
-    Define the prefix of the routes to be used in provided links.
-
-    Default to `/coreUI`.
-
-- `classes`
-
-    A list of classes to be added to display units.
-
-    Default to `[ 't-page' ]`.
+    Defaults to `true`: button is hidden.
 
 - `verbosity`
 
@@ -194,10 +97,6 @@ Known configuration options are:
     - `AppEdit.C.Verbose.CONFIGURE`
 
         Trace `AppEdit.configure()` calls and their result
-
-    - `AppEdit.C.Verbose.PAGE`
-
-        Trace changes on page and relevant authorizations
 
 Please note that `AppEdit.configure()` method should be called in the same terms both in client and server sides.
 

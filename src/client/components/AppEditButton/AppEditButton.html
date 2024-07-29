@@ -1,0 +1,11 @@
+<template name="AppEditButton">
+    <div class="AppEditButton">
+
+        {{#unless uiSMView }}
+            {{#if wantSwitch }}
+                {{> toggleSwitch (toggleParms) }}
+            {{/if}}
+        {{/unless}}
+
+    </div>
+</template>

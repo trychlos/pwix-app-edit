@@ -10,11 +10,9 @@ let _conf = {};
 AppEdit._conf = new ReactiveVar( _conf );
 
 AppEdit._defaults = {
-    appName: null,
-    adminRole: 'APP_ADMINISTRATOR',
-    menuIcon: 'fa-chevron-right',
-    routePrefix: '/coreApp',
-    classes: [ 't-page' ],
+    allowFn: null,
+    toggleHiddenWhenNotConnected: true,
+    toggleHiddenWhenUnallowed: true,
     verbosity: AppEdit.C.Verbose.CONFIGURE
 };
 

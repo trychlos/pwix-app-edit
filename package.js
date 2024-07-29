@@ -23,27 +23,20 @@ Package.onTest( function( api ){
 });
 
 function configure( api ){
-    const _use = function(){
-        api.use( ...arguments );
-        api.imply( ...arguments );
-    };
     api.versionsFrom([ '2.9.0', '3.0-rc.0' ]);
-    _use( 'check' );
-    _use( 'blaze-html-templates@2.0.0 || 3.0.0-alpha300.0', 'client' );
-    _use( 'ecmascript' );
-    _use( 'less@4.0.0', 'client' );
-    _use( 'mongo@1.16.1 || 2.0.0-rc300.2' );
-    _use( 'ostrio:flow-router-extra@3.10.0 || 3.11.0-rc300.0' );
-    _use( 'reactive-dict' );
-    _use( 'reactive-var' );
-    _use( 'tmeasday:check-npm-versions@1.0.2 || 2.0.0-beta.0', 'server' );
-    _use( 'tracker' );
-    //_use( 'tracker', 'client' );
-    api.addFiles( 'src/client/components/coreCookiesLink/coreCookiesLink.js', 'client' );
-    api.addFiles( 'src/client/components/coreGDPRLink/coreGDPRLink.js', 'client' );
-    api.addFiles( 'src/client/components/coreGTULink/coreGTULink.js', 'client' );
-    api.addFiles( 'src/client/components/coreLegalsLink/coreLegalsLink.js', 'client' );
-    api.addFiles( 'src/client/components/coreYesnoSelect/coreYesnoSelect.js', 'client' );
+    api.use( 'check' );
+    api.use( 'blaze-html-templates@2.0.0 || 3.0.0-alpha300.0', 'client' );
+    api.use( 'ecmascript' );
+    api.use( 'less@4.0.0', 'client' );
+    api.use( 'pwix:core-app@1.0.0' );
+    api.use( 'pwix:editor@1.4.0' );
+    api.use( 'pwix:i18n@1.5.0' );
+    api.use( 'pwix:toggle-switch@0.3.0' );
+    api.use( 'pwix:ui-layout@2.0.0' );
+    api.use( 'reactive-var' );
+    api.use( 'tmeasday:check-npm-versions@1.0.2 || 2.0.0-beta.0', 'server' );
+    api.use( 'tracker' );
+    api.addFiles( 'src/client/components/AppEditButton/AppEditButton.js', 'client' );
 }
 
 // NPM dependencies are checked in /src/server/js/check_npms.js
