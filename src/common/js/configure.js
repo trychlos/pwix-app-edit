@@ -11,6 +11,7 @@ AppEdit._conf = new ReactiveVar( _conf );
 
 AppEdit._defaults = {
     allowFn: null,
+    collection: 'contents',
     toggleHiddenWhenNotConnected: true,
     toggleHiddenWhenUnallowed: true,
     verbosity: AppEdit.C.Verbose.CONFIGURE

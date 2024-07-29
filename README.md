@@ -72,6 +72,10 @@ Known configuration options are:
 
     `allowFn` prototype is: `async allowFn( action<String> [, ...<Any> ] ): Boolean`
 
+- `collection`
+
+    The name of the documents collection(s), defaulting to `contents`.
+
 - `toggleHiddenWhenNotConnected`
 
     Whether the toggle button must be shown and disabled when user is not connected, or hidden.
