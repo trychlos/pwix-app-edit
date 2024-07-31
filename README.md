@@ -34,9 +34,15 @@ The `IAppEditable` interface extends the `CoreApp.RunContext` class with folllow
 
     Use the `allowFn` configuration option, defaulting to `false`.
 
+    `pwix:app-edit` needs two additional `DisplayUnit` parameters to manage the display of the edit toggle button and the permissions of the user to actually edit the document:
+
+    - `wantEditionSwitch`: whether the edit toggle button must be displayed
+
+    - `wantEditionRoles`: the roles needed by the user to be allowed to edit the current page documents.
+
 - `ieditableAsked( [ask<Boolean>] ): Boolean`
 
-    A getter/setter which says if the user has asked for editing of the current document.
+    A getter/setter which says if the user has asked for editing the current document.
 
 #### Functions
 
@@ -57,6 +63,16 @@ Returns the i18n namespace used by the package. Used to add translations at runt
 Displays (or not) a toggle button to let the user enter in edition mode on the current page.
 
 The component is configurable through the package configuration as there is most probably only one such toggle switch in the application.
+
+## Permissions management
+
+This package can take advantage of `pwix:permissions` package to manage the user permissions through the configured `allowFn()` function.
+
+Two additional `DisplayUnit` tags are defined here:
+
+- `wantEditionSwitch` whether the page should present an edition switch to the user
+
+- `wantEditionRoles` whether the user is allowed to edit the page documents.
 
 ## Configuration
 
