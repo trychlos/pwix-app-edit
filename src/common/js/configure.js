@@ -25,7 +25,7 @@ AppEdit._defaults = {
  */
 AppEdit.configure = function( o ){
     if( o && _.isObject( o )){
-        _.merge( _conf, AppEdit._defaults, o );
+        _conf = _.merge( AppEdit._defaults, _conf, o );
         AppEdit._conf.set( _conf );
         // be verbose if asked for
         if( _conf.verbosity & AppEdit.C.Verbose.CONFIGURE ){
@@ -37,5 +37,5 @@ AppEdit.configure = function( o ){
     return AppEdit._conf.get();
 }
 
-_.merge( _conf, AppEdit._defaults );
+_conf = _.merge( {}, AppEdit._defaults );
 AppEdit._conf.set( _conf );
