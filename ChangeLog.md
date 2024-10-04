@@ -2,9 +2,9 @@
 
 ## ChangeLog
 
-### 1.0.1-rc
+### 1.0.1
 
-    Release date: 
+    Release date: 2024-10- 4
 
     - Fix configuration overrides
 
@@ -16,4 +16,4 @@
 
 ---
 P. Wieser
-- Last updated on 2024, Jul. 30th
+- Last updated on 2024, Oct. 4th
