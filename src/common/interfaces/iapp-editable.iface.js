@@ -1,5 +1,5 @@
 /*
- * pwix:app-edit/src/client/interfaces/iapp-editable.iface.js
+ * pwix:app-edit/src/common/interfaces/iapp-editable.iface.js
  *
  * An interface which extends the application RunContext with the management of inline documents.
  * 

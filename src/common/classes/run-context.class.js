@@ -1,5 +1,5 @@
 /*
- * pwix:app-edit/src/client/classes/run-context.class.js
+ * pwix:app-edit/src/common/classes/run-context.class.js
  */
 
 import _ from 'lodash';
@@ -30,3 +30,6 @@ export class RunContext extends mix( CoreApp.RunContext ).with( IAppEditable ){
         return this;
     }
 }
+
+// replace the CoreApp RunContext class with our extended one
+CoreApp.RunContext = RunContext;

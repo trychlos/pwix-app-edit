@@ -1,6 +1,6 @@
 Package.describe({
     name: 'pwix:app-edit',
-    version: '1.0.2-rc',
+    version: '1.1.0-rc',
     summary: 'Extends a Meteor RunContext to let an application have editable inline documents',
     git: 'https://github.com/trychlos/pwix-app-edit.git',
     documentation: 'README.md'
