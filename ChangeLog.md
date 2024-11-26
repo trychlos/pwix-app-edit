@@ -7,6 +7,7 @@
     Release date: 
 
     - Move classes and interfaces definition to common code, thus bumping minor candidate version number
+    - IAppEditable methods are now prefixed with iAppEditable
 
 ### 1.0.1
 

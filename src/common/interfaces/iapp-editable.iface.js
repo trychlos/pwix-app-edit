@@ -23,7 +23,7 @@ export const IAppEditable = DeclareMixin(( superclass ) => class extends supercl
         // an autorun tracker reset the editionAsked reactive var each time the user logs out
         Tracker.autorun(() => {
             if( !Meteor.userId()){
-                self.ieditableAsked( false );
+                self.iAppEditableAsked( false );
             }
         });
 
@@ -37,7 +37,7 @@ export const IAppEditable = DeclareMixin(( superclass ) => class extends supercl
      * @returns {Boolean} whether edition is allowed to the user for the page
      *  Reactive method
      */
-    async ieditableAllowed(){
+    async iAppEditableAllowed(){
         const allowFn = AppEdit.configure().allowFn;
         const allowed = allowFn ? await allowFn( 'pwix.app_edit.feat.editable' ) : false;
         return allowed;
@@ -49,7 +49,7 @@ export const IAppEditable = DeclareMixin(( superclass ) => class extends supercl
      * @param {Boolean} b the optional 'asked' status, i.e. whether the used has asked for editing the current page
      * @returns {Boolean} the current asked edition status
      */
-    ieditableAsked( b ){
+    iAppEditableAsked( b ){
         if( b === true || b === false ){
             this.#editionAsked.set( b );
         }

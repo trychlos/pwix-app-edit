@@ -24,7 +24,7 @@ Template.AppEditSerializer.helpers({
         // editable defaults to false
         //  so make that always non-editable UNLESS we really have editable === true and enough width
         o.mode = Editor.C.Mode.STANDARD;
-        if( AppEdit.runContext.ieditableAsked() === true && UILayout.width() >= UILayout.C.Breakpoints.MD ){
+        if( AppEdit.runContext.iAppEditableAsked() === true && UILayout.width() >= UILayout.C.Breakpoints.MD ){
             o.mode = Editor.C.Mode.PREVIEW;
         }
         //console.debug( 'parmsSerializer', this, o );

@@ -20,30 +20,6 @@ When an application manages inline editable documents, following features are to
 
 The exported `AppEdit` global object provides following items:
 
-#### Classes
-
-#### Interfaces
-
-##### `IAppEditable`
-
-The `IAppEditable` interface extends the `CoreApp.RunContext` class with folllowing methods:
-
-- `async ieditableAllowed(): Boolean`
-
-    Whether the user is allowed to edit the current document.
-
-    Use the `allowFn` configuration option, defaulting to `false`.
-
-    `pwix:app-edit` needs two additional `DisplayUnit` parameters to manage the display of the edit toggle button and the permissions of the user to actually edit the document:
-
-    - `wantEditionSwitch`: whether the edit toggle button must be displayed
-
-    - `wantEditionRoles`: the roles needed by the user to be allowed to edit the current page documents.
-
-- `ieditableAsked( [ask<Boolean>] ): Boolean`
-
-    A getter/setter which says if the user has asked for editing the current document.
-
 #### Functions
 
 ##### `AppEdit.configure()`
@@ -56,13 +32,33 @@ A reactive data source.
 
 Returns the i18n namespace used by the package. Used to add translations at runtime.
 
+### Interfaces
+
+The `pwix:app-edit` package extends the `CoreApp.RunContext` class with the `IAppEditable` interface providing folllowing methods:
+
+- `async iAppEditableAllowed(): Boolean`
+
+    Whether the user is allowed to edit the current document.
+
+    Use the `allowFn` configuration option, defaulting to `false`.
+
+    `pwix:app-edit` needs two additional `DisplayUnit` parameters to manage the display of the edit toggle button and the permissions of the user to actually edit the document:
+
+    - `wantEditionSwitch`: whether the edit toggle button must be displayed
+
+    - `wantEditionRoles`: the roles needed by the user to be allowed to edit the current page documents.
+
+- `iAppEditableAsked( [ask<Boolean>] ): Boolean`
+
+    A getter/setter which says if the user has asked for editing the current document.
+
 ### Blaze components
 
 #### `AppEditButton`
 
 Displays (or not) a toggle button to let the user enter in edition mode on the current page.
 
-The component is configurable through the package configuration as there is most probably only one such toggle switch in the application.
+The component is configurable through the package configuration as there is considered as an application-level component.
 
 ## Permissions management
 

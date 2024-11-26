@@ -30,7 +30,7 @@ Template.AppEditButton.onRendered( function(){
     self.autorun(() => {
         if( Meteor.userId()){
             const toggleHiddenWhenUnallowed = AppEdit.configure().toggleHiddenWhenUnallowed;
-            AppEdit.runContext.ieditableAllowed().then(( allowed ) => {
+            AppEdit.runContext.iAppEditableAllowed().then(( allowed ) => {
                 if( allowed ){
                     self.PCK.displayed.set( true );
                     self.PCK.enabled.set( true );
@@ -53,7 +53,7 @@ Template.AppEditButton.helpers({
             labelLeft: pwixI18n.label( I18N, 'switch_label' ),
             title: pwixI18n.label( I18N, 'switch_title' ),
             name: 'AppEditButton',
-            state: AppEdit.runContext.ieditableAsked(),
+            state: AppEdit.runContext.iAppEditableAsked(),
             enabled: Template.instance().PCK.enabled.get()
         }
     },
@@ -67,6 +67,6 @@ Template.AppEditButton.helpers({
 
 Template.AppEditButton.events({
     'ts-state .AppEditButton'( event, instance, data ){
-        AppEdit.runContext.ieditableAsked( data.state );
+        AppEdit.runContext.iAppEditableAsked( data.state );
     }
 });
