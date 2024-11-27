@@ -1,7 +1,7 @@
 Package.describe({
     name: 'pwix:app-edit',
     version: '1.1.0-rc',
-    summary: 'Extends a Meteor RunContext to let an application have editable inline documents',
+    summary: 'Extends the AppPages DisplayUnit class to let an application have editable inline documents',
     git: 'https://github.com/trychlos/pwix-app-edit.git',
     documentation: 'README.md'
 });
@@ -28,8 +28,10 @@ function configure( api ){
     api.use( 'blaze-html-templates@2.0.0 || 3.0.0-alpha300.0', 'client' );
     api.use( 'ecmascript' );
     api.use( 'less@4.0.0', 'client' );
+    api.use( 'pwix:app-pages@1.0.0' );
     api.use( 'pwix:core-app@1.0.0' );
     api.use( 'pwix:editor@1.4.0' );
+    api.use( 'pwix:env-settings@2.0.0' );
     api.use( 'pwix:i18n@1.5.0' );
     api.use( 'pwix:toggle-switch@0.3.0' );
     api.use( 'pwix:ui-layout@2.0.0' );

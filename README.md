@@ -6,19 +6,45 @@ A package which helps an application to manage inline editable documents. It rel
 
 ## Features
 
-When an application manages inline editable documents, following features are to be managed:
+When an application manages inline editable documents, following features are managed:
 
-- have an edit button to let the user edit the document; this button may be hidden, on, or off
+- an switch button is available and let the user edit the document; this button may be hidden or disabled, on, or off
 
-- have a Blaze component to visually edit the document
+- a Blaze component is available and let the user visually edit the document
 
-- have storage collections to record the document depending of the chosen language.
+- a storage collection is used to record the document depending of the chosen language.
+
+## How does this work ?
+
+At the environment level, the `wantEditionSwitch` parameter must be set to `true` to activate the features (for the application in this environment). When `false`, which is the default, the edition switch is NOT displayed.
+
+A `wantEditionSwitch` must be set to `true` in each display unit which wants take advantage of this feature. This is only considered if the eponym environment settings is itself set to `true`. When the display unit property is `false`, which is the default, the edition switch can be hidden, or shown and disabled, depending of the relevant configuration parameter.
+
+When both switches are `true` (for the application's page in the current environment), the user must be allowed to edit this particular page. This is the function of the configured `allowFn()` function. When the user is not allowed, the edition switch can be hidden, or shown and disabled, depending of the relevant configuration parameter.
+
+The `pwix:app-edit` package extends the `AppPages.DisplayUnit` class to add and manage the `wantEditionSwitch` property.
 
 ## Provides
 
 ### `AppEdit`
 
 The exported `AppEdit` global object provides following items:
+
+#### Functions
+
+##### `AppEdit.currentPage()`
+
+A shortcut to the `CoreAPP.IAppPageable.iAppPageableCurrent()` method.
+
+##### `AppEdit.environmentWantSwitch()`
+
+Whether the environment settings have defined a `wantEditionSwitch` to `true`, defaulting to `false`.
+
+#### Interfaces
+
+##### `AppEdit.IAppEditable`
+
+The definition of the interface added to the `CoreApp.RunContext` class.
 
 #### Functions
 
@@ -36,18 +62,6 @@ Returns the i18n namespace used by the package. Used to add translations at runt
 
 The `pwix:app-edit` package extends the `CoreApp.RunContext` class with the `IAppEditable` interface providing folllowing methods:
 
-- `async iAppEditableAllowed(): Boolean`
-
-    Whether the user is allowed to edit the current document.
-
-    Use the `allowFn` configuration option, defaulting to `false`.
-
-    `pwix:app-edit` needs two additional `DisplayUnit` parameters to manage the display of the edit toggle button and the permissions of the user to actually edit the document:
-
-    - `wantEditionSwitch`: whether the edit toggle button must be displayed
-
-    - `wantEditionRoles`: the roles needed by the user to be allowed to edit the current page documents.
-
 - `iAppEditableAsked( [ask<Boolean>] ): Boolean`
 
     A getter/setter which says if the user has asked for editing the current document.
@@ -58,17 +72,17 @@ The `pwix:app-edit` package extends the `CoreApp.RunContext` class with the `IAp
 
 Displays (or not) a toggle button to let the user enter in edition mode on the current page.
 
-The component is configurable through the package configuration as there is considered as an application-level component.
+The component is configurable through the package configuration as this is considered as an application-level component.
+
+#### `AppEditSerializer`
+
+Encapsulates the `pwix:editor/teEditor` component to manage serialization and multi-languages documents.
+
+The component must be provided with the same parameters than `teEditor`.
 
 ## Permissions management
 
 This package can take advantage of `pwix:permissions` package to manage the user permissions through the configured `allowFn()` function.
-
-Two additional `DisplayUnit` tags are defined here:
-
-- `wantEditionSwitch` whether the page should present an edition switch to the user
-
-- `wantEditionRoles` whether the user is allowed to edit the page documents.
 
 ## Configuration
 
@@ -80,9 +94,9 @@ Known configuration options are:
 
     An async function which will be called with an action string identifier, and must return whether the current user is allowed to do the specified action.
 
-    If the function is not provided, then the default is to deny all actions.
+    If the function is not provided, then the default is to deny all editions.
 
-    `allowFn` prototype is: `async allowFn( action<String> [, ...<Any> ] ): Boolean`
+    `allowFn` prototype is: `async allowFn( action<String>, user<String|Object>, page<DisplayUnit> ): Boolean`
 
 - `collection`
 

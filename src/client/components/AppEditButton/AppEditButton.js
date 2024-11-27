@@ -4,7 +4,7 @@
  *  Display a toggle button when the user is allowed to edit the current page in an editable environment.
  * 
  *  This is a toggle button, which may be:
- *  - not visible at all (user not connected or not allowed)
+ *  - not visible at all (not allowed by the environment settings, or user not connected or not allowed)
  *  - off: user is allowed but didn't have chosen to edit, editor is in STANDARD mode
  *  - on: user is allowed and want edit, editor is in PREVIEW mode
  */
@@ -18,32 +18,50 @@ Template.AppEditButton.onCreated( function(){
     const self = this;
 
     self.PCK = {
+        // whether the environment wants an edition switch ?
+        wantSwitch: new ReactiveVar( false ),
+        // whether the user is allowed to edit the current page ?
+        allowed: new ReactiveVar( false ),
+        // whether to display the switch button ?
         displayed: new ReactiveVar( false ),
+        // whether to enable the dismplayed switch ?
         enabled: new ReactiveVar( false )
     };
-});
 
-Template.AppEditButton.onRendered( function(){
-    const self = this;
-
-    // hide or show the button depending of the page, the user, the environment (this is up to the application)
+    // whether the environment wants an edition switch ?
     self.autorun(() => {
+        self.PCK.wantSwitch.set( AppEdit.environmentWantSwitch());
+    });
+
+    // whether the user is allowed to edit the current page ?
+    self.autorun( async () => {
+        let allowed = false;
         if( Meteor.userId()){
-            const toggleHiddenWhenUnallowed = AppEdit.configure().toggleHiddenWhenUnallowed;
-            AppEdit.runContext.iAppEditableAllowed().then(( allowed ) => {
-                if( allowed ){
-                    self.PCK.displayed.set( true );
-                    self.PCK.enabled.set( true );
-                } else {
-                    self.PCK.displayed.set( !toggleHiddenWhenUnallowed );
-                    self.PCK.enabled.set( false );
-                }
-            });
-        } else {
-            const toggleHiddenWhenNotConnected = AppEdit.configure().toggleHiddenWhenNotConnected;
-            self.PCK.displayed.set( !toggleHiddenWhenNotConnected );
-            self.PCK.enabled.set( false );
+            const page = AppEdit.currentPage();
+            allowed = await page.editionAllowed();
         }
+        self.PCK.allowed.set( allowed );
+    });
+
+    // whether to display the switch button ?
+    self.autorun( async () => {
+        let displayed = false;
+        if( self.PCK.wantSwitch.get()){
+            if( Meteor.userId()){
+                const toggleHiddenWhenUnallowed = AppEdit.configure().toggleHiddenWhenUnallowed;
+                displayed = self.PCK.allowed.get() ? true : !toggleHiddenWhenUnallowed;
+            } else {
+                const toggleHiddenWhenNotConnected = AppEdit.configure().toggleHiddenWhenNotConnected;
+                displayed = !toggleHiddenWhenNotConnected;
+            }
+        }
+        self.PCK.displayed.set( displayed );
+    });
+
+    // whether to enable the switch button when displayed ?
+    self.autorun( async () => {
+        const enabled = self.PCK.displayed.get() && Boolean( Meteor.userId()) && self.PCK.allowed.get();
+        self.PCK.enabled.set( enabled );
     });
 });
 
@@ -60,7 +78,6 @@ Template.AppEditButton.helpers({
 
     wantSwitch(){
        const displayed = Template.instance().PCK.displayed.get();
-       //console.debug( 'wantSwitch', displayed );
        return displayed;
     }
 });

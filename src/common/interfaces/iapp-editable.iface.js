@@ -11,6 +11,7 @@ const assert = require( 'assert' ).strict;
 import { DeclareMixin } from '@vestergaard-company/js-mixin';
 
 import { ReactiveVar } from 'meteor/reactive-var';
+import { Tracker } from 'meteor/tracker';
 
 export const IAppEditable = DeclareMixin(( superclass ) => class extends superclass {
 
@@ -32,16 +33,6 @@ export const IAppEditable = DeclareMixin(( superclass ) => class extends supercl
 
         return this;
     } 
-
-    /**
-     * @returns {Boolean} whether edition is allowed to the user for the page
-     *  Reactive method
-     */
-    async iAppEditableAllowed(){
-        const allowFn = AppEdit.configure().allowFn;
-        const allowed = allowFn ? await allowFn( 'pwix.app_edit.feat.editable' ) : false;
-        return allowed;
-    }
 
     /**
      * Getter/Setter
