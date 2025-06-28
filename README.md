@@ -1,5 +1,8 @@
 # pwix:app-edit
 
+__As of 2025, June, 28th, this package is obsoleted in favor of [pwix:app-pages-edit](https://github.com/trychlos/pwix-app-pages-edit)__
+
+
 ## What is it ?
 
 A package which helps an application to manage inline editable documents. It relies on `pwix:core-app` and extends the `CoreApp.RunContext` class with a `IAppEditable` interface.
