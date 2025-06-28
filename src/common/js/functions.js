@@ -9,7 +9,10 @@ AppEdit.currentPage = function(){
     return currentPage;
 }
 
-AppEdit.environmentWantSwitch = function(){
-    const wantSwitch = EnvSettings.environmentSettings().wantEditionSwitch === true;
-    return wantSwitch;
+AppEdit.environmentWantSwitch = async function(){
+    return EnvSettings.environmentSettings()
+        .then(( settings ) => {
+            const wantSwitch = ( settings.wantEditionSwitch === true );
+            return wantSwitch;
+        });
 }

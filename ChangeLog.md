@@ -9,6 +9,7 @@
     - Move classes and interfaces definition to common code, thus bumping minor candidate version number
     - IAppEditable methods are now prefixed with iAppEditable
     - Extends AppPages.DisplayUnit class to define editionAllowed() method
+    - environmentWantSwitch() function becomes async
 
 ### 1.0.1
 

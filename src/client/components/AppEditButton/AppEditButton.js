@@ -30,7 +30,10 @@ Template.AppEditButton.onCreated( function(){
 
     // whether the environment wants an edition switch ?
     self.autorun(() => {
-        self.PCK.wantSwitch.set( AppEdit.environmentWantSwitch());
+        AppEdit.environmentWantSwitch()
+            .then(( wantSwitch ) => {
+                self.PCK.wantSwitch.set( wantSwitch );
+            });
     });
 
     // whether the user is allowed to edit the current page ?

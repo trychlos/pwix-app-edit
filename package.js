@@ -29,7 +29,6 @@ function configure( api ){
     api.use( 'ecmascript' );
     api.use( 'less@4.0.0', 'client' );
     api.use( 'pwix:app-pages@1.0.0' );
-    api.use( 'pwix:core-app@1.0.0' );
     api.use( 'pwix:editor@1.4.0' );
     api.use( 'pwix:env-settings@2.0.0' );
     api.use( 'pwix:i18n@1.5.0' );

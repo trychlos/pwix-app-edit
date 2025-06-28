@@ -5,11 +5,11 @@
 import _ from 'lodash';
 import mix from '@vestergaard-company/js-mixin';
 
-import { CoreApp } from 'meteor/pwix:core-app';
+import { AppPages } from 'meteor/pwix:app-pages';
 
 import { IAppEditable } from '../interfaces/iapp-editable.iface.js';
 
-export class RunContext extends mix( CoreApp.RunContext ).with( IAppEditable ){
+export class RunContext extends mix( AppPages.RunContext ).with( IAppEditable ){
 
     // static data
 
@@ -31,5 +31,5 @@ export class RunContext extends mix( CoreApp.RunContext ).with( IAppEditable ){
     }
 }
 
-// replace the CoreApp RunContext class with our extended one
-CoreApp.RunContext = RunContext;
+// replace the AppPages RunContext class with our extended one
+AppPages.RunContext = RunContext;

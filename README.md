@@ -8,7 +8,7 @@ A package which helps an application to manage inline editable documents. It rel
 
 When an application manages inline editable documents, following features are managed:
 
-- an switch button is available and let the user edit the document; this button may be hidden or disabled, on, or off
+- a switch button is available and let the user edit the document; this button may be hidden or disabled, on or off
 
 - a Blaze component is available and let the user visually edit the document
 
